@@ -18,7 +18,9 @@ jobs:
           java-version: '8'
 
       - name: 编译
-        run: javac -encoding UTF-8 -Xlint:all -d bin src/metro/*.java src/metro/exception/*.java
+        run: |
+          mkdir -p bin
+          javac -encoding UTF-8 -Xlint:all -d bin src/metro/*.java src/metro/exception/*.java
 
       - name: 运行全部功能测试
         run: |
