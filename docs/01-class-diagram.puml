@@ -1,0 +1,173 @@
+@startuml
+'==============================================================
+' 武汉地铁模拟系统  类图
+' 画法严格遵循课本（面向对象程序设计教程）第 1 章规范：
+'   · 类框三栏：类名 / 属性 / 操作，成员只写名字，不写可见性符号与类型
+'   · 关联：实线，线上标注多重性（1、0..1、1..*、*）与关系名
+'   · 聚合：实线加实心菱形头（菱形指向“整体”一端）
+'   · 泛化：空心三角箭头，由子类指向父类
+'   · 依赖：虚线箭头
+' 图中不显示所有方法（题目要求）
+'==============================================================
+skinparam shadowing false
+skinparam defaultFontName "Microsoft YaHei"
+skinparam classFontSize 24
+skinparam classAttributeFontSize 20
+skinparam nodesep 50
+skinparam ranksep 60
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+hide empty circle
+
+title 武汉地铁模拟系统类图
+
+'---------- 类 ----------
+class Station {
+  name
+  lines
+  --
+  getName()
+  getLines()
+  isTransferStation()
+  addLine()
+}
+
+class Line {
+  name
+  stations
+  distances
+  --
+  appendSection()
+  totalLength()
+  isContinuousSection()
+}
+
+class SubwayNetwork {
+  lines
+  stations
+  adjacency
+  --
+  getOrCreateStation()
+  link()
+  getEdges()
+  requireStation()
+  getTransferStations()
+  commonLines()
+}
+
+class SubwayFileReader {
+  SEPARATORS
+  --
+  read()
+  parseSection()
+  splitPair()
+  locateDataFile()
+}
+
+class PathFinder {
+  network
+  --
+  getShortestPath()
+  findNearbyStations()
+  findAllPaths()
+  pathDistance()
+}
+
+class PathPrinter {
+  network
+  --
+  printPath()
+  buildRidePlan()
+  splitByLine()
+  linesOfGroups()
+}
+
+class FareCalculator {
+  LIMITS
+  STEPS
+  --
+  baseFare()
+  fare()
+  describe()
+}
+
+class TicketType {
+  SINGLE
+  WUHAN_TONG
+  DAY_PASS
+  --
+  getRate()
+}
+
+class SubwaySystem {
+  network
+  pathFinder
+  fareCalculator
+  pathPrinter
+  --
+  getTransferStations()
+  queryNearbyStations()
+  getAllPaths()
+  getShortestPath()
+  printPath()
+  calculateSingleFare()
+  calculateFare()
+}
+
+class MetroUI {
+  startBox
+  endBox
+  ticketBox
+  output
+  --
+  doShortest()
+  doAllPaths()
+  doTransfers()
+  doLines()
+}
+
+class Test {
+  --
+  main()
+}
+
+class Exception {
+}
+
+class RuntimeException {
+}
+
+class InvalidInputException {
+}
+
+class StationNotFoundException {
+}
+
+'---------- 关系（按课本符号） ----------
+
+' 聚合：实线加实心菱形头，菱形在整体一端
+SubwayNetwork "1" *-- "1..*" Line : 线路集合
+SubwayNetwork "1" *-- "0..*" Edge : 邻接表
+Line "1" *-- "2..*" Station : 按行车顺序
+SubwaySystem "1" *-- "1" SubwayNetwork
+SubwaySystem "1" *-- "1" PathFinder
+SubwaySystem "1" *-- "1" PathPrinter
+SubwaySystem "1" *-- "1" FareCalculator
+
+' 关联：实线加多重性
+Edge "0..*" -- "2" Station : 连接
+TicketType "1" -- "0..*" FareCalculator : 使用
+
+' 依赖：虚线箭头
+PathFinder ..> SubwayNetwork
+PathPrinter ..> SubwayNetwork
+SubwayFileReader ..> SubwayNetwork : 创建
+Test ..> SubwaySystem
+MetroUI ..> SubwaySystem : 调用
+SubwaySystem ..> SubwayFileReader : 装载数据
+
+' 泛化：空心三角
+Exception <|-- InvalidInputException
+RuntimeException <|-- StationNotFoundException
+
+@enduml

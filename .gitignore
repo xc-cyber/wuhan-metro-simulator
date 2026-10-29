@@ -1,0 +1,17 @@
+# 编译输出
+bin/
+*.class
+
+# IDE
+.vscode/
+.classpath
+.project
+.settings/
+
+# Office 临时文件
+~$*
+*.tmp
+
+# 系统文件
+Thumbs.db
+.DS_Store
