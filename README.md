@@ -49,7 +49,23 @@ wuhan-metro-simulator/
 | 功能七 | 10 分 | 同一路径的武汉通 9 折 / 日票票价 |
 | 选做 | +10 分 | Swing 图形界面（MetroUI） |
 
-## 三、编译与运行
+## 三、UML 建模
+
+### 类图
+
+![类图](docs/01-class-diagram.png)
+
+### 用例图
+
+![用例图](docs/02-use-case.png)
+
+完整的建模与设计说明见 **[大作业报告 PDF](docs/report.pdf)**（含用例详细描述、类说明表、测试结果）。
+
+## 四、图形界面（选做）
+
+![图形界面](docs/04-gui-screenshot.png)
+
+## 五、编译与运行
 
 需要 JDK 8 及以上。
 
@@ -64,11 +80,27 @@ java -Dfile.encoding=UTF-8 -cp bin metro.Test     # 命令行测试
 java -Dfile.encoding=UTF-8 -cp bin metro.MetroUI  # 图形界面
 ```
 
-## 四、设计要点
+## 六、设计要点
 
 - **三层结构**：实体类（Station / Line 等）→ 业务类（SubwayNetwork / PathFinder 等）→ 控制类（SubwaySystem），界面层（MetroUI / Test）零业务逻辑。
 - **printPath 全局最优**：以动态规划求"换乘次数最少"的线路组合，与官方样例逐字一致。
 - **路径枚举去重**：共线平行边产生的重复站点序列以序列指纹去重。
 - **附近站点**：按实际里程（Dijkstra 变体）而非站数判断"n 公里内"。
 
-详细设计见 `docs/report.pdf`。
+## 七、功能演示
+
+命令行版运行 `run.bat` 会依次输出全部 7 个功能的结果与异常处理测试，例如：
+
+```
+乘2号线[宝通寺，中南路]，换乘4号线[中南路，武昌火车站]
+```
+
+图形界面版运行 `run-gui.bat` 后，可选择起点、终点与票种，一键查询最短路径、全部路径、中转站与线路信息。
+
+## 八、文档
+
+| 文档 | 说明 |
+|---|---|
+| [docs/report.pdf](docs/report.pdf) | 大作业报告（含用例图、类图、需求分析、设计说明、测试结果） |
+| [docs/01-class-diagram.puml](docs/01-class-diagram.puml) | 类图源文件（PlantUML） |
+| [docs/02-use-case.puml](docs/02-use-case.puml) | 用例图源文件（PlantUML） |
